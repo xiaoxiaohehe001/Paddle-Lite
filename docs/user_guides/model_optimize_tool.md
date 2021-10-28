@@ -33,6 +33,7 @@ pip install x2paddle
 arch -x86_64 ./lite/tools/build.sh build_optimize_tool
 ```
 该命令会编译 x86 格式的 opt 工具，但是不会影响工具的正常使用，编译成功后，在./build.opt/lite/api目录下，生成了可执行文件 opt
+<<<<<<< HEAD
 
  [使用可执行文件 opt 工具](./opt/opt_bin)
 ## 使用 X2paddle 导出 Padde Lite 支持格式
@@ -65,3 +66,13 @@ x2paddle --framework=onnx --model=onnx_model.onnx --save_dir=pd_model --to_lite=
 ```
 
 TensorFlow、Caffe 以及 PyTorch 模型转换参考 [X2Paddle API](https://github.com/PaddlePaddle/X2Paddle/tree/develop/docs/inference_model_convertor/convert2lite_api.md)
+=======
+
+ [使用可执行文件 opt 工具](./opt/opt_bin)
+## 合并 x2paddle 和 opt 功能的一键脚本
+
+**背景**：如果想用 Paddle Lite 运行第三方来源（tensorflow、caffe、onnx）模型，一般需要经过两次转化。即使用 x2paddle 工具将第三方模型转化为 PaddlePaddle 格式，再使用 opt 将 PaddlePaddle 模型转化为 Padde Lite 可支持格式。
+为了简化这一过程，我们提供了：
+
+ [合并 x2paddle 和 opt 的一键脚本](./opt/x2paddle&opt)
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48

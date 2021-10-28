@@ -1,4 +1,4 @@
-// Copyright (c) 2019 PaddlePaddle Authors. All Rights Reserved.
+// Copyright (c) 2021 PaddlePaddle Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,26 +13,26 @@
 // limitations under the License.
 
 #pragma once
-#include <algorithm>
-#include "lite/core/kernel.h"
-#include "lite/operators/generate_proposals_v2_op.h"
+
+#include <limits>
+#include <memory>
+#include <string>
+#include <vector>
+#include "lite/core/optimizer/mir/pass.h"
+#include "lite/core/optimizer/mir/pass_registry.h"
+#include "lite/core/tensor.h"
+#include "lite/core/types.h"
 
 namespace paddle {
 namespace lite {
-namespace kernels {
-namespace arm {
+namespace mir {
 
-class GenerateProposalsV2Compute
-    : public KernelLite<TARGET(kARM), PRECISION(kFloat)> {
+class AssignValueCalcOfflinePass : public mir::StmtPass {
  public:
-  using param_t = operators::GenerateProposalsV2Param;
-
-  void Run() override;
-
-  virtual ~GenerateProposalsV2Compute() = default;
+  void Apply(const std::unique_ptr<SSAGraph>& graph) override;
+  void RemoveAssignValuePattern(const std::unique_ptr<SSAGraph>& graph);
 };
 
-}  // namespace arm
-}  // namespace kernels
+}  // namespace mir
 }  // namespace lite
 }  // namespace paddle

@@ -8,8 +8,19 @@ lite_cc_library(subgraph_bridge_converter_nnadapter SRCS converter.cc DEPS nnada
 set(nnadapter_subgraph_bridge_deps core subgraph_bridge_utility_nnadapter subgraph_bridge_converter_nnadapter)
 
 lite_cc_library(subgraph_bridge_fc_op_nnadapter SRCS fc_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+<<<<<<< HEAD
 lite_cc_library(subgraph_bridge_cast_op_nnadapter SRCS cast_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
 lite_cc_library(subgraph_bridge_norm_op_nnadapter SRCS norm_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+=======
+lite_cc_library(subgraph_bridge_scale_op_nnadapter SRCS scale_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_transpose_op_nnadapter SRCS transpose_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_cast_op_nnadapter SRCS cast_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_norm_op_nnadapter SRCS norm_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_pow_op_nnadapter SRCS pow_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_batch_normalization_op_nnadapter SRCS batch_normalization_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_clip_op_nnadapter SRCS clip_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+lite_cc_library(subgraph_bridge_reduce_mean_op_nnadapter SRCS reduce_mean_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 lite_cc_library(subgraph_bridge_dropout_op_nnadapter SRCS dropout_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
 lite_cc_library(subgraph_bridge_pad_op_nnadapter SRCS pad_op.cc DEPS ${nnadapter_subgraph_bridge_deps})
 
@@ -18,8 +29,19 @@ set(nnadapter_subgraph_bridges
         subgraph_bridge_utility_nnadapter
         subgraph_bridge_converter_nnadapter
         subgraph_bridge_fc_op_nnadapter
+<<<<<<< HEAD
         subgraph_bridge_cast_op_nnadapter
         subgraph_bridge_norm_op_nnadapter
+=======
+        subgraph_bridge_scale_op_nnadapter
+        subgraph_bridge_transpose_op_nnadapter
+        subgraph_bridge_cast_op_nnadapter
+        subgraph_bridge_norm_op_nnadapter
+        subgraph_bridge_pow_op_nnadapter
+        subgraph_bridge_batch_normalization_op_nnadapter
+        subgraph_bridge_clip_op_nnadapter
+        subgraph_bridge_reduce_mean_op_nnadapter
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
         subgraph_bridge_dropout_op_nnadapter
         subgraph_bridge_pad_op_nnadapter
         CACHE INTERNAL "nnadapter_subgraph_bridges")

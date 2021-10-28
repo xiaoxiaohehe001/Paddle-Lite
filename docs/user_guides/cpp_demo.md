@@ -20,7 +20,11 @@
 - 输出数据：推理执行结束后，通过 `predictor->GetOutput(num)` 接口获取第 `num` 个输出 tensor。
 
 其流程图如下：
+<<<<<<< HEAD:docs/user_guides/cpp_demo.md
 <p align=center> <img src = "https://raw.githubusercontent.com/PaddlePaddle/Paddle-Lite/develop/docs/images/predict_workflow.png"/></p>
+=======
+<p align=center> <img src = "https://raw.githubusercontent.com/PaddlePaddle/Paddle-Lite/release/v2.10/docs/images/predict_workflow.png"/></p>
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48:docs/user_guides/cpp_demo.md
 
 ## C++ 应用开发说明
 

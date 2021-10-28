@@ -3,7 +3,11 @@
 
 ## CreatePaddlePredictor
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_api.h)&gt;
+=======
+ \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_api.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 template <typename ConfigT>
@@ -33,7 +37,11 @@ std::shared_ptr<PaddlePredictor> predictor = CreatePaddlePredictor<MobileConfig>
 
 ## CxxConfig
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_api.h)&gt;
+=======
+ \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_api.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 class CxxConfig;
@@ -252,7 +260,11 @@ int x86_math_num_threads() const;
 
 ## MobileConfig
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_api.h)&gt;
+=======
+ \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_api.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 class MobileConfig;
@@ -493,7 +505,11 @@ bool metal_use_mps() const;
 
 ## PaddlePredictor
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_api.h)&gt;
+=======
+ \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_api.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 class PaddlePredictor;
@@ -669,7 +685,11 @@ virtual std::string GetVersion() const = 0;
 
 ## TargetType
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_place.h)&gt;
+=======
+ \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_place.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 class TargetType;
@@ -680,7 +700,11 @@ class TargetType;
 
 ## PrecisionType
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_place.h)&gt;
+=======
+ \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_place.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 class PrecisionType;
@@ -693,7 +717,11 @@ class PrecisionType;
 
 ## DataLayoutType
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_place.h)&gt;
+=======
+ \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_place.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 class DataLayoutType;
@@ -706,7 +734,11 @@ class DataLayoutType;
 
 ## Place
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_place.h)&gt;
+=======
+ \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_place.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```C++
 struct Place;
@@ -721,7 +753,11 @@ Place{TargetType(ARM), PrecisionType(FP32), DataLayoutType(NCHW)}
 
 ## PowerMode
 
+<<<<<<< HEAD
  \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_place.h)&gt;
+=======
+ \#include &lt;[paddle\_place.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_place.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 enum PowerMode;
@@ -755,7 +791,11 @@ PowerMode详细说明如下：
 
 
 ## Tensor
+<<<<<<< HEAD
  \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/develop/lite/api/paddle_api.h)&gt;
+=======
+ \#include &lt;[paddle\_api.h](https://github.com/PaddlePaddle/Paddle-Lite/tree/release/v2.10/lite/api/paddle_api.h)&gt;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ```c++
 struct Tensor

@@ -16,4 +16,8 @@ NNAdapter 支持联发科 APU
      - `apu_ddk <https://paddlelite-demo.bj.bcebos.com/devices/mediatek/apu_ddk.tar.gz>`_
      - 空值
 
+<<<<<<< HEAD
 详细请参考 `联发科 APU 部署示例 <https://paddle-lite.readthedocs.io/zh/develop/demo_guides/mediatek_apu.html>`_
+=======
+详细请参考 `联发科 APU 部署示例 <https://paddle-lite.readthedocs.io/zh/release-v2.10_a/demo_guides/mediatek_apu.html>`_
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48

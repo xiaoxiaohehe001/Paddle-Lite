@@ -59,17 +59,23 @@ class XPULinkConvMaxFuser : public FuseBase {
  public:
   explicit XPULinkConvMaxFuser(bool with_branch) { with_branch_ = with_branch; }
   void BuildPattern() override {
+<<<<<<< HEAD
     auto non_quant_teller = [](const Node* node) -> bool {
       auto op_desc = *const_cast<Node*>(node)->stmt()->op_info();
       return (!op_desc.HasAttr("enable_int8") ||
               !op_desc.GetAttr<bool>("enable_int8"));
     };
 
+=======
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
     auto* input =
         VarNode("input")->assert_is_op_input("__xpu__conv2d", "Input");
     auto* xpu_fusion_op =
         OpNode("xpu_fusion_op", "__xpu__conv2d")
+<<<<<<< HEAD
             ->assert_node_satisfied(non_quant_teller)
+=======
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
             ->assert_op_attr<bool>("has_branch", with_branch_);
 
     PMNode* branch = nullptr;
@@ -107,6 +113,7 @@ class XPULinkConvMaxFuser : public FuseBase {
 class XPULinkFcMaxFuser : public FuseBase {
  public:
   void BuildPattern() override {
+<<<<<<< HEAD
     auto non_quant_teller = [](const Node* node) -> bool {
       auto op_desc = *const_cast<Node*>(node)->stmt()->op_info();
       return (!op_desc.HasAttr("enable_int8") ||
@@ -115,6 +122,10 @@ class XPULinkFcMaxFuser : public FuseBase {
     auto* input = VarNode("input")->assert_is_op_input("__xpu__fc", "Input");
     auto* xpu_fusion_op = OpNode("xpu_fusion_op", "__xpu__fc")
                               ->assert_node_satisfied(non_quant_teller);
+=======
+    auto* input = VarNode("input")->assert_is_op_input("__xpu__fc", "Input");
+    auto* xpu_fusion_op = OpNode("xpu_fusion_op", "__xpu__fc");
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
     *input >> *xpu_fusion_op;
   }

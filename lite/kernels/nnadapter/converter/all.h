@@ -95,7 +95,10 @@ REGISTER_CONVERTER(fusion_elementwise_max_activation,
 REGISTER_CONVERTER(fusion_elementwise_pow_activation,
                    ConvertElementwise,
                    "huawei_ascend_npu");
+<<<<<<< HEAD
 REGISTER_CONVERTER(pow, ConvertPow, "huawei_ascend_npu");
+=======
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 REGISTER_CONVERTER(
     sigmoid,
     ConvertUnaryActivations,
@@ -153,8 +156,11 @@ REGISTER_CONVERTER(shape, ConvertShape, "huawei_ascend_npu");
 REGISTER_CONVERTER(slice, ConvertSlice, "huawei_ascend_npu");
 REGISTER_CONVERTER(squeeze, ConvertSqueeze, "huawei_ascend_npu");
 REGISTER_CONVERTER(squeeze2, ConvertSqueeze, "huawei_ascend_npu");
+<<<<<<< HEAD
 REGISTER_CONVERTER(range, ConvertRange, "huawei_ascend_npu");
 REGISTER_CONVERTER(stack, ConvertStack, "huawei_ascend_npu");
+=======
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 REGISTER_CONVERTER(fill_constant, ConvertFillConstant, "huawei_ascend_npu");
 REGISTER_CONVERTER(fill_any_like, ConvertFillAnyLike, "huawei_ascend_npu");
 REGISTER_CONVERTER(

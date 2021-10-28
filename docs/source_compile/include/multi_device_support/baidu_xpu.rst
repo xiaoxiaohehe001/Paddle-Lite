@@ -19,7 +19,11 @@ Paddle Lite 已通过算子方式支持百度昆仑 XPU 在 x86 和 ARM 服务�
      - OFF
    * - baidu_xpu_sdk_root
      - 设置 baidu xpu sdk 目录
+<<<<<<< HEAD
      - 用户自定义
+=======
+     - 空值
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
      - 空值
    * - with_baidu_xpu_xtcl
      - 编译 xpu 库时是否使能 xtcl
@@ -28,10 +32,18 @@ Paddle Lite 已通过算子方式支持百度昆仑 XPU 在 x86 和 ARM 服务�
    * - baidu_xpu_sdk_url
      - baidu xpu sdk 下载链接
      - 用户自定义
+<<<<<<< HEAD
      - https://baidu-kunlun-product.cdn.bcebos.com/KL-SDK/klsdk-dev_paddle
+=======
+     - https://baidu-kunlun-product.cdn.bcebos.com/KL-SDK/klsdk-dev/20210921 
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
    * - baidu_xpu_sdk_env
      - baidu xpu sdk 环境
      - bdcentos_x86_64 / centos7_x86_64 / ubuntu_x86_64 / kylin_aarch64
      - bdcentos_x86_64(x86) / kylin_aarch64(arm)
 
+<<<<<<< HEAD
 详细请参考 `百度昆仑 XPU 部署示例 <https://paddle-lite.readthedocs.io/zh/develop/demo_guides/baidu_xpu.html>`_
+=======
+详细请参考 `百度昆仑 XPU 部署示例 <https://paddle-lite.readthedocs.io/zh/release-v2.10_a/demo_guides/baidu_xpu.html>`_
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48

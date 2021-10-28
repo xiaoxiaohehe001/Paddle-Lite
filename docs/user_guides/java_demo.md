@@ -24,7 +24,11 @@
 其流程图如下：
 
 
+<<<<<<< HEAD
 <p align=center> <img src = "https://raw.githubusercontent.com/PaddlePaddle/Paddle-Lite/develop/docs/images/predict_workflow.png"/></p>
+=======
+<p align=center> <img src = "https://raw.githubusercontent.com/PaddlePaddle/Paddle-Lite/release/v2.10/docs/images/predict_workflow.png"/></p>
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 
 ## Java 应用开发说明

@@ -15,7 +15,11 @@ ARM Linux 环境下编译适用于 ARM Linux 的库
 
 
    * 
+<<<<<<< HEAD
      通常情况下，你不需要自行从源码构建编译包，优先推荐\ `下载 Paddle Lite 官方发布的预编译包 <https://paddle-lite.readthedocs.io/zh/latest/quick_start/release_lib.html>`_\ ，可满足一部分场景的需求。如果官方发布的编译包未覆盖你的场景，或者需要修改 Paddle Lite 源代码，则可参考本文构建。
+=======
+     通常情况下，你不需要自行从源码构建编译包，优先推荐\ `下载 Paddle Lite 官方发布的预编译包 <https://paddle-lite.readthedocs.io/zh/release-v2.10_a/quick_start/release_lib.html>`_\ ，可满足一部分场景的需求。如果官方发布的编译包未覆盖你的场景，或者需要修改 Paddle Lite 源代码，则可参考本文构建。
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
    * 
      本文介绍的编译方法只适用于 Paddle Lite v2.6及以上版本。v2.3及之前版本请参考\  `release/v2.3 源码编译方法 <https://paddle-lite.readthedocs.io/zh/release-v2.10_a/source_compile/v2.3_compile.html>`_\ 。
@@ -28,7 +32,11 @@ ARM Linux 环境下编译适用于 ARM Linux 的库
    * - Host环境
      - 目标硬件环境
    * - ARM-Linux
+<<<<<<< HEAD
      - CPU arm64/armhf :raw-html-m2r:`<br>` Huawei Ascend NPU :raw-html-m2r:`<br>` Baidu XPU :raw-html-m2r:`<br>` OpenCL :raw-html-m2r:`<br>` 注：查询以上芯片支持的具体型号，可参考\ `支持硬件列表 <https://paddle-lite.readthedocs.io/zh/develop/quick_start/support_hardware.html>`_\ 章节。
+=======
+     - CPU arm64/armhf :raw-html-m2r:`<br>` Huawei Ascend NPU :raw-html-m2r:`<br>` Baidu XPU :raw-html-m2r:`<br>` OpenCL :raw-html-m2r:`<br>` 注：查询以上芯片支持的具体型号，可参考\ `支持硬件列表 <https://paddle-lite.readthedocs.io/zh/release-v2.10_a/quick_start/support_hardware.html>`_\ 章节。
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 准备编译环境
 ------------------------------------------------------
@@ -100,7 +108,11 @@ Paddle Lite 仓库中\ ``./lite/tools/build_linux.sh``\ 脚本文件用于构建
      - OFF / ON
      - OFF
    * - with_extra
+<<<<<<< HEAD
      - 是否编译完整算子（见\ `支持算子 <https://paddle-lite.readthedocs.io/zh/develop/quick_start/support_operation_list.html>`_\ 一节）
+=======
+     - 是否编译完整算子（见\ `支持算子 <https://paddle-lite.readthedocs.io/zh/release-v2.10_a/quick_start/support_operation_list.html>`_\ 一节）
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
      - OFF / ON
      - OFF
    * - with_profile
@@ -129,9 +141,15 @@ Paddle Lite 仓库中\ ``./lite/tools/build_linux.sh``\ 脚本文件用于构建
 
 .. code-block:: shell
 
+<<<<<<< HEAD
    # 下载 Paddle Lite 源码并切换到发布分支，如 develop
    git clone https://github.com/PaddlePaddle/Paddle-Lite.git
    cd Paddle-Lite && git checkout develop
+=======
+   # 下载 Paddle Lite 源码并切换到发布分支，如 release/v2.10
+   git clone https://github.com/PaddlePaddle/Paddle-Lite.git
+   cd Paddle-Lite && git checkout release/v2.10
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
    # (可选) 删除 third-party 目录，编译脚本会自动从国内 CDN 下载第三方库文件
    # rm -rf third-party

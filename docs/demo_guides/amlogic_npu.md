@@ -49,7 +49,11 @@ Paddle Lite 已支持晶晨 NPU 的预测部署。
 
 ### 已支持（或部分支持）NNAdapter 的 Paddle 算子
 
+<<<<<<< HEAD
 您可以查阅[ NNAdapter 算子支持列表](https://github.com/PaddlePaddle/Paddle-Lite/blob/develop/lite/kernels/nnadapter/converter/all.h)获得各算子在不同新硬件上的最新支持信息。
+=======
+您可以查阅[ NNAdapter 算子支持列表](https://github.com/PaddlePaddle/Paddle-Lite/blob/release/v2.10/lite/kernels/nnadapter/converter/all.h)获得各算子在不同新硬件上的最新支持信息。
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
 ## 参考示例演示
 
@@ -120,7 +124,11 @@ Paddle Lite 已支持晶晨 NPU 的预测部署。
 
 ### 运行图像分类示例程序
 
+<<<<<<< HEAD
 - 下载 Paddle Lite 通用示例程序[PaddleLite-generic-demo.tar.gz](https://paddlelite-demo.bj.bcebos.com/devices/generic/PaddleLite-generic-demo.tar.gz)，解压后目录主体结构如下：
+=======
+- 下载 Paddle Lite 通用示例程序[PaddleLite-generic-demo.tar.gz](https://paddlelite-demo.bj.bcebos.com/devices/generic/PaddleLite-generic-demo_v2_10_0.tar.gz)，解压后目录主体结构如下：
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
   ```shell
     - PaddleLite-generic-demo

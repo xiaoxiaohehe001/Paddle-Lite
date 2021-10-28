@@ -157,6 +157,7 @@ static void preprocess(ARMContext* ctx,
     lite::arm::math::fill_bias_fc(
         o_data, bias_hh.data<float>(), m, n, flag_act);
   }
+<<<<<<< HEAD
 }
 
 /******************************************************
@@ -298,6 +299,149 @@ static void create_mask_matrix(const Tensor* sequence_length,
   TransposeNormal<float>(temp, mask_matrix, trans_vec);
 }
 
+=======
+}
+
+/******************************************************
+input:
+    ctx:context,
+    init_h:(2D),
+    init_c:(2D),
+    mask_tensor:(1D)input->dims()[1],
+    mode:LSTM, GRU
+output:
+    output:(2D)output->dims()[1], output->dims()[2],
+    last_h:(2D),
+    last_c:(2D)
+*******************************************************/
+static void postprocess(ARMContext* ctx,
+                        Tensor* output,
+                        const Tensor* init_h,
+                        const Tensor* init_c,
+                        Tensor* last_h,
+                        Tensor* last_c,
+                        const Tensor& mask_tensor,
+                        std::string mode) {
+  Tensor mask_broadcast_1;
+  mask_broadcast_1.Resize(mask_tensor.dims());
+  auto mask_ptr_1 = mask_broadcast_1.mutable_data<float>();
+  auto mask_ptr = mask_tensor.data<float>();
+  auto out_ptr = output->mutable_data<float>();
+  auto cur_h_ptr = last_h->mutable_data<float>();
+  auto pre_h_ptr = init_h->data<float>();
+  int offset = 0;
+
+  // out = out * mask_broadcast
+  // curr_h = out * mask_broadcast + pre_h * (1 - mask_broadcast);
+  for (int i = 0; i < output->dims()[0]; i++) {
+    mask_ptr_1[i] = 1 - mask_ptr[i];
+    for (int j = 0; j < output->dims()[1]; j++) {
+      offset = i * output->dims()[1] + j;
+      out_ptr[offset] *= mask_ptr[i];
+      cur_h_ptr[offset] = out_ptr[offset] + pre_h_ptr[offset] * mask_ptr_1[i];
+    }
+  }
+  if ("LSTM" == mode) {
+    auto pre_c_ptr = init_c->data<float>();
+    auto cur_c_ptr = last_c->mutable_data<float>();
+
+    // curr_c = curr_c * mask_broadcast + pre_c * (1 - mask_broadcast);
+    for (int i = 0; i < output->dims()[0]; i++) {
+      for (int j = 0; j < output->dims()[1]; j++) {
+        offset = i * output->dims()[1] + j;
+        cur_c_ptr[offset] =
+            cur_c_ptr[offset] * mask_ptr[i] + pre_c_ptr[offset] * mask_ptr_1[i];
+      }
+    }
+  }
+}
+
+static DDim get_stride(const DDim& ddim) {
+  DDim strides;
+  strides[ddim.size() - 1] = 1;
+  for (int i = ddim.size() - 2; i >= 0; --i) {
+    strides[i] = strides[i + 1] * ddim[i + 1];
+  }
+  return strides;
+}
+
+template <typename T>
+static void TransposeNormal(const Tensor& in,
+                            Tensor* out,
+                            const std::vector<int>& axis) {
+  const int rank = axis.size();
+  auto in_stride = get_stride(in.dims());
+  auto out_stride = get_stride(out->dims());
+  const T* in_ptr = in.data<T>();
+  T* out_ptr = out->mutable_data<T>();
+
+  auto transpose_helper = [&](int64_t beg, int64_t end) {
+    for (int64_t out_idx = beg; out_idx < end; ++out_idx) {
+      int64_t in_idx = 0;
+      int64_t tmp_idx = out_idx;
+      // calculate the input index
+      for (int i = 0; i < rank; ++i) {
+        const int64_t coordinate = tmp_idx / out_stride[i];
+        tmp_idx -= coordinate * out_stride[i];
+        in_idx += coordinate * in_stride[axis[i]];
+      }
+      out_ptr[out_idx] = in_ptr[in_idx];
+    }
+  };
+  transpose_helper(0, out->numel());
+}
+
+/******************************************************
+input:
+    sequence_length,
+    is_reverse
+output:
+    mask_matrix,
+    min_seq_len
+******************************************************/
+static void create_mask_matrix(const Tensor* sequence_length,
+                               Tensor* mask_matrix,
+                               const bool& is_reverse,
+                               int* min_seq_len) {
+  // Tensor to vector<int>
+  std::vector<int> seq_len_vec;
+  seq_len_vec.resize(sequence_length->numel());
+  std::memcpy(&seq_len_vec[0],
+              sequence_length->data<int>(),
+              sequence_length->numel() * sizeof(int));
+
+  const int& table_width = mask_matrix->dims()[0];
+  Tensor temp;
+  DDimLite dims(
+      std::vector<int64_t>{mask_matrix->dims()[1], mask_matrix->dims()[0]});
+  temp.Resize(dims);
+  float* data_temp = temp.mutable_data<float>();
+  std::fill(data_temp, data_temp + mask_matrix->numel(), 1.f);
+  *min_seq_len = table_width;
+  for (unsigned int i = 0; i < seq_len_vec.size(); i++) {
+    // reset the mask matrix
+    *min_seq_len = std::min(seq_len_vec[i], *min_seq_len);
+    if (seq_len_vec[i] == table_width) {
+      continue;
+    }
+    if (is_reverse) {
+      std::fill(data_temp + i * table_width,
+                data_temp + (i + 1) * table_width - seq_len_vec[i],
+                0.f);
+    } else {
+      std::fill(data_temp + i * table_width + seq_len_vec[i],
+                data_temp + (i + 1) * table_width,
+                0.f);
+    }
+  }
+  mask_matrix->mutable_data<float>();
+  std::vector<int> trans_vec;
+  trans_vec.emplace_back(1);
+  trans_vec.emplace_back(0);
+  TransposeNormal<float>(temp, mask_matrix, trans_vec);
+}
+
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 static void lstm_cell(ARMContext* ctx,
                       Tensor* input,
                       Tensor* weight_hh,
@@ -798,6 +942,12 @@ void RnnCompute::Run() {
       lite::arm::math::concat_func<float>(output_vec_t, 2, output_holder);
     } else {
       RUN_RNN_LAYER(i, output_holder, false, 0);
+<<<<<<< HEAD
+=======
+    }
+    if (num_layers % 2 == 0) {
+      output->CopyDataFrom(*output_holder);
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
     }
   }
   // output_holder != output

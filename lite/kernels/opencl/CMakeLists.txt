@@ -14,7 +14,11 @@ endif()
 # image kernel      #
 #####################
 # basic
+<<<<<<< HEAD
 add_kernel(gather_opencl_image OPENCL basic SRCS gather_image_compute.cpp)
+=======
+
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 #add_kernel(elementwise_add_opencl_image OPENCL basic SRCS elementwise_add_image_compute.cc)
 #add_kernel(elementwise_sub_opencl_image OPENCL basic SRCS elementwise_sub_image_compute.cc)
 #add_kernel(elementwise_mul_opencl_image OPENCL basic SRCS elementwise_mul_image_compute.cc)

@@ -86,6 +86,11 @@ void ConvActivationFusePass::Apply(const std::unique_ptr<SSAGraph>& graph) {
   if (has_nnadapter) {
     act_types = std::vector<std::string>{"relu", "relu1", "relu6"};
   }
+<<<<<<< HEAD
+=======
+
+  bool has_alpha = false;
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
   bool has_alpha = false;
   std::vector<std::string> conv_types{

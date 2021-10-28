@@ -98,7 +98,10 @@ else()
   add_kernel(compare_compute_xpu XPU extra SRCS compare_compute.cc)
   add_kernel(is_empty_compute_xpu XPU extra SRCS is_empty_compute.cc)
   add_kernel(shape_compute_xpu XPU extra SRCS shape_compute.cc)
+<<<<<<< HEAD
   add_kernel(lod_array_length_compute_xpu XPU extra SRCS lod_array_length_compute.cc)
+=======
+>>>>>>> ee0e6f1f7a0b7cada255f054e18247a63c997c48
 
   # extra(fused kernel)
   add_kernel(__xpu__resnet50_compute_xpu XPU extra SRCS __xpu__resnet50_compute.cc)
