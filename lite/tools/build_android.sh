@@ -90,6 +90,7 @@ function set_benchmark_options {
   WITH_EXCEPTION=ON
   BUILD_JAVA=OFF
   WITH_OPENCL=ON
+  WITH_NNADAPTER=ON
   if [ ${WITH_PROFILE} == "ON" ] || [ ${WITH_PRECISION_PROFILE} == "ON" ]; then
     WITH_LOG=ON
   else
@@ -212,7 +213,6 @@ function make_tiny_publish_so {
   fi
   if [ "${BUILD_ARM82_FP16}" == "ON" ]; then
       TOOLCHAIN=clang
-      ARCH=armv8
   fi
 
   if [ "$NDK_ROOT" ]; then
@@ -243,7 +243,7 @@ function make_tiny_publish_so {
       -DNNADAPTER_WITH_HUAWEI_KIRIN_NPU=$NNADAPTER_WITH_HUAWEI_KIRIN_NPU \
       -DNNADAPTER_HUAWEI_KIRIN_NPU_SDK_ROOT=$NNADAPTER_HUAWEI_KIRIN_NPU_SDK_ROOT \
       -DNNADAPTER_WITH_AMLOGIC_NPU=$NNADAPTER_WITH_AMLOGIC_NPU \
-      -DNNADAPTER_HUAWEI_AMLOGIC_SDK_ROOT=$NNADAPTER_AMLOGIC_NPU_SDK_ROOT \
+      -DNNADAPTER_AMLOGIC_NPU_SDK_ROOT=$NNADAPTER_AMLOGIC_NPU_SDK_ROOT \
       -DNNADAPTER_WITH_MEDIATEK_APU=$NNADAPTER_WITH_MEDIATEK_APU \
       -DNNADAPTER_MEDIATEK_APU_SDK_ROOT=$NNADAPTER_MEDIATEK_APU_SDK_ROOT \
       -DLITE_WITH_OPENCL=$WITH_OPENCL \
@@ -294,7 +294,6 @@ function make_full_publish_so {
   fi
   if [ "${BUILD_ARM82_FP16}" == "ON" ]; then
       TOOLCHAIN=clang
-      ARCH=armv8
   fi
 
   if [ "$NDK_ROOT" ]; then

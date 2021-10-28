@@ -83,7 +83,7 @@ bool CheckFlagsValid() {
   bool ret = true;
   bool is_opt_model =
       (FLAGS_uncombined_model_dir.empty() && FLAGS_model_file.empty() &&
-       FLAGS_param_file.empty() && !FLAGS_optimized_model_path.empty());
+       FLAGS_param_file.empty() && !FLAGS_optimized_model_file.empty());
   bool is_origin_model =
       (!FLAGS_uncombined_model_dir.empty() ||
        (!FLAGS_model_file.empty() && !FLAGS_param_file.empty()));
@@ -126,13 +126,13 @@ bool CheckFlagsValid() {
 const std::string PrintUsage() {
   std::stringstream ss;
   ss << "\nNote: \n"
-        "  If load the optimized model, set --optimized_model_path. "
+        "  If load the optimized model, set --optimized_model_file. "
         "\n"
         "  Otherwise, set --uncombined_model_dir for uncomnbined paddle model "
         "or set --model_file and param_file for combined paddle model. \n"
         "For example (Android): \n"
         "  For optimized model : ./benchmark_bin "
-        "--optimized_model_path=/data/local/tmp/mobilenetv1_opt.nb "
+        "--optimized_model_file=/data/local/tmp/mobilenetv1_opt.nb "
         "--input_shape=1,3,224,224 --backend=arm \n\n"
         "  For uncombined model: ./benchmark_bin "
         "--uncombined_model_dir=/data/local/tmp/mobilenetv1 "
@@ -149,7 +149,7 @@ const std::string PrintUsage() {
         "LD_LIBRARY_PATH=./build.lite.linux*/third_party/install/mklml/lib/"
         ":$LD_LIBRARY_PATH \n"
         "  For optimized model : ./benchmark_bin "
-        "--optimized_model_path=/path/to/mbilenetv1_opt.nb "
+        "--optimized_model_file=/path/to/mbilenetv1_opt.nb "
         "--input_shape=1,3,224,224 --backend=x86 \n\n"
         "  For uncombined model: ./benchmark_bin "
         "--uncombined_model_dir=/path/to/mobilenetv1 "
@@ -164,19 +164,25 @@ const std::string PrintUsage() {
 }
 
 void SetBackendConfig(lite_api::MobileConfig& config) {  // NOLINT
-  if (FLAGS_backend == "opencl" || FLAGS_backend == "x86_opencl") {
-    // Set opencl kernel binary.
-    // Large addtitional prepare time is cost due to algorithm selecting and
-    // building kernel from source code.
-    // Prepare time can be reduced dramitically after building algorithm file
-    // and OpenCL kernel binary on the first running.
-    // The 1st running time will be a bit longer due to the compiling time if
-    // you don't call `set_opencl_binary_path_name` explicitly.
-    // So call `set_opencl_binary_path_name` explicitly is strongly
-    // recommended.
+  if (FLAGS_backend == "opencl,arm" || FLAGS_backend == "opencl" ||
+      FLAGS_backend == "opencl,x86" || FLAGS_backend == "x86_opencl") {
+// Set opencl kernel binary.
+// Large addtitional prepare time is cost due to algorithm selecting and
+// building kernel from source code.
+// Prepare time can be reduced dramitically after building algorithm file
+// and OpenCL kernel binary on the first running.
+// The 1st running time will be a bit longer due to the compiling time if
+// you don't call `set_opencl_binary_path_name` explicitly.
+// So call `set_opencl_binary_path_name` explicitly is strongly
+// recommended.
 
-    // Make sure you have write permission of the binary path.
-    // We strongly recommend each model has a unique binary name.
+// Make sure you have write permission of the binary path.
+// We strongly recommend each model has a unique binary name.
+#ifdef __ANDROID__
+    if (FLAGS_opencl_cache_dir.empty()) {
+      FLAGS_opencl_cache_dir = "/data/local/tmp/";
+    }
+#endif  // __ANDROID__
     config.set_opencl_binary_path_name(FLAGS_opencl_cache_dir,
                                        FLAGS_opencl_kernel_cache_file);
 
@@ -208,10 +214,92 @@ void SetBackendConfig(lite_api::MobileConfig& config) {  // NOLINT
     }
     config.set_opencl_precision(gpu_precision);
   }
+
+  // nnadapter option
+  std::vector<std::string> nnadapter_backends = {"imagination_nna",
+                                                 "rockchip_npu",
+                                                 "mediatek_apu",
+                                                 "huawei_kirin_npu",
+                                                 "huawei_ascend_npu",
+                                                 "amlogic_npu"};
+  auto backends_list = lite::Split(FLAGS_backend, ",");
+  bool with_nnadapter =
+      std::find(backends_list.begin(), backends_list.end(), "nnadapter") !=
+      backends_list.end();
+  if (with_nnadapter) {
+    std::vector<std::string> nnadapter_devices;
+    auto device_list = lite::Split(FLAGS_nnadapter_device_names, ",");
+
+    if (device_list.size() < 1) {
+      std::cerr << "The device list for nnadapter is null!" << std::endl;
+      return;
+    }
+
+    for (auto& device : device_list) {
+      if (std::find(nnadapter_backends.begin(),
+                    nnadapter_backends.end(),
+                    device) != nnadapter_backends.end()) {
+        nnadapter_devices.push_back(device);
+      } else {
+        std::cerr << "Find and ignore unsupport nnadapter device: " << device
+                  << std::endl;
+      }
+    }
+
+    if (nnadapter_devices.size() == 0) {
+      std::cerr << "No avaliable device found for nnadapter" << std::endl;
+      return;
+    } else {
+      config.set_nnadapter_device_names(nnadapter_devices);
+      config.set_nnadapter_context_properties(
+          FLAGS_nnadapter_context_properties);
+    }
+  }
 }
 
-void OutputOptModel(const std::string& save_optimized_model_path) {
+const std::string OutputOptModel(const std::string& opt_model_file) {
   auto opt = paddle::lite_api::OptBase();
+
+  if (FLAGS_backend != "") {
+    auto backends_list = lite::Split(FLAGS_backend, ",");
+    bool with_nnadapter =
+        std::find(backends_list.begin(), backends_list.end(), "nnadapter") !=
+        backends_list.end();
+    if (FLAGS_cpu_precision == "fp16") opt.EnableFloat16();
+    if (with_nnadapter) {
+      std::string valid_places;
+      for (auto& backend : backends_list) {
+        if (backend != "nnadapter") {
+          valid_places += backend;
+          valid_places += ',';
+        }
+      }
+      if (FLAGS_nnadapter_device_names != "") {
+        valid_places += FLAGS_nnadapter_device_names;
+      } else {
+        valid_places.pop_back();
+      }
+      opt.SetValidPlaces(valid_places);
+    } else {
+      opt.SetValidPlaces(FLAGS_backend);
+    }
+  }
+
+  auto npos = opt_model_file.find(".nb");
+  std::string out_name = opt_model_file.substr(0, npos);
+  opt.SetOptimizeOut(out_name);
+  bool is_opt_model =
+      (FLAGS_uncombined_model_dir.empty() && FLAGS_model_file.empty() &&
+       FLAGS_param_file.empty() && !FLAGS_optimized_model_file.empty());
+  if (is_opt_model) {
+    if (!paddle::lite::IsFileExists(opt_model_file)) {
+      std::cerr << lite::string_format("Mode file[%s] not exist!",
+                                       opt_model_file.c_str())
+                << std::endl;
+      std::abort();
+    }
+    return FLAGS_optimized_model_file;
+  }
 
   if (!FLAGS_uncombined_model_dir.empty()) {
     opt.SetModelDir(FLAGS_uncombined_model_dir);
@@ -219,19 +307,16 @@ void OutputOptModel(const std::string& save_optimized_model_path) {
     opt.SetModelFile(FLAGS_model_file);
     opt.SetParamFile(FLAGS_param_file);
   }
-  opt.SetOptimizeOut(save_optimized_model_path);
 
-  if (FLAGS_backend != "") {
-    if (FLAGS_cpu_precision == "fp16") opt.EnableFloat16();
-    opt.SetValidPlaces(FLAGS_backend);
-  }
-
-  auto previous_opt_model = save_optimized_model_path + ".nb";
-  int ret = system(
-      lite::string_format("rm -rf %s", previous_opt_model.c_str()).c_str());
-  if (ret == 0) {
-    std::cout << "Delete previous optimized model: " << previous_opt_model
-              << std::endl;
+  std::string saved_opt_model_file =
+      opt_model_file.empty() ? ".nb" : opt_model_file;
+  if (paddle::lite::IsFileExists(saved_opt_model_file)) {
+    int err = system(
+        lite::string_format("rm -rf %s", saved_opt_model_file.c_str()).c_str());
+    if (err == 0) {
+      std::cout << "Delete previous optimized model: " << saved_opt_model_file
+                << std::endl;
+    }
   }
 
   opt.Run();
@@ -243,11 +328,11 @@ void OutputOptModel(const std::string& save_optimized_model_path) {
              ? FLAGS_model_file + " and " + FLAGS_param_file
              : FLAGS_uncombined_model_dir)
      << std::endl;
-  ss << "Save optimized model to " << save_optimized_model_path + ".nb"
-     << std::endl;
+  ss << "Save optimized model to " << saved_opt_model_file << std::endl;
   std::cout << ss.str() << std::endl;
 
   StoreBenchmarkResult(ss.str());
+  return saved_opt_model_file;
 }
 
 }  // namespace lite_api

@@ -40,7 +40,6 @@ void LightPredictor::Build(const std::string& lite_model_file,
 #endif
   BuildRuntimeProgram(program_desc_);
   PrepareFeedFetch();
-  program_desc_.reset();
 }
 
 void LightPredictor::Build(const std::string& model_dir,
@@ -318,6 +317,8 @@ void LightPredictor::WeightFP32ToFP16() {
                                     "gru",
                                     "sequence_conv",
                                     "elementwise_add",
+                                    "elementwise_sub",
+                                    "elementwise_div",
                                     "elementwise_mul",
                                     "prelu"};
   for (size_t i = 0; i < program_desc->BlocksSize(); i++) {
@@ -334,6 +335,9 @@ void LightPredictor::WeightFP32ToFP16() {
             Tensor tmp_tensor;
             auto input_tensor =
                 scope_->FindVar(input_name)->GetMutable<lite::Tensor>();
+
+            if (input_tensor->precision() != PRECISION(kFloat)) continue;
+
             tmp_tensor.CopyDataFrom(*input_tensor);
             input_tensor->clear();
             input_tensor->set_precision(PRECISION(kFP16));
@@ -393,6 +397,25 @@ bool LightPredictor::TryShrinkMemory() {
   }
   return true;
 }
+void LightPredictor::ClearTensorArray(
+    const std::shared_ptr<const cpp::ProgramDesc>& program_desc) {
+  for (size_t blk_idx = 0; blk_idx < program_desc->BlocksSize(); blk_idx++) {
+    const cpp::BlockDesc* block =
+        program_desc->GetBlock<cpp::BlockDesc>(blk_idx);
+    for (size_t var_idx = 0; var_idx < block->VarsSize(); var_idx++) {
+      const cpp::VarDesc* var = block->GetVar<cpp::VarDesc>(var_idx);
+      CHECK(var);
 
+      auto* var_ptr = program_->exec_scope()->FindVar(var->Name());
+      if (var_ptr->IsType<std::vector<Tensor>>() &&
+          (var->Name() != "feed" && var->Name() != "fetch")) {
+        std::vector<Tensor>* tensor_array_var =
+            program_->exec_scope()->FindMutableTensorList(var->Name());
+        CHECK(tensor_array_var);
+        tensor_array_var->clear();
+      }
+    }
+  }
+}
 }  // namespace lite
 }  // namespace paddle
